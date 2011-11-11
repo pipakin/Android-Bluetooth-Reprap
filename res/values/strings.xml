@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bluetooth RepRap</string>
+    <string name="device">Device:</string>
+    <string name="select_device">Select Device</string>
+    <string name="FIRMWARE_NAME">Firmware Name: </string>
+    <string name="FIRMWARE_URL">Firmware Url: </string>
+    <string name="PROTOCOL_VERSION">Protocol Version: </string>
+    <string name="MACHINE_TYPE">Machine Type: </string>
+    <string name="EXTRUDER_COUNT">Extruder Count: </string>
+    <string name="UUID">UUID: </string>
+    <string name="DEVICE_STATUS">Status: </string>
+    <string name="UNKNOWN">UNKNOWN</string>
+    <string name="X_AXIS">X: </string>
+    <string name="GO">Go</string>
+    <string name="SET_ZERO">Set 0</string>
+    <string name="HOME">Home</string>
+    <string name="Y_AXIS">Y: </string>
+    <string name="Z_AXIS">Z: </string>
+    <string name="FAN">Fan: </string>
+    <string name="TEMP">Temp: </string>
+    <string name="SET">Set</string>
+    <string name="GET">Get</string>
+    <string name="sd">SD:</string>
+    <string name="files">Files...</string>
+    <string name="selectfile">Select File to Print</string>
+
+</resources>

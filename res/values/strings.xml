@@ -24,5 +24,8 @@
     <string name="sd">SD:</string>
     <string name="files">Files...</string>
     <string name="selectfile">Select File to Print</string>
+    <string name="upload">Upload...</string>
+    <string name="LOCAL_FILES">Select File to Upload</string>
+    <string name="BED_TEMP">"Bed: "</string>
 
 </resources>

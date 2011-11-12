@@ -1,5 +1,6 @@
 package com.hermit.btreprap;
 
+import com.hermit.btreprap.R;
 import com.hermit.btreprap.DeviceActivity.IncomingHandler;
 import com.hermit.btreprap.service.RepRapConnectionService;
 

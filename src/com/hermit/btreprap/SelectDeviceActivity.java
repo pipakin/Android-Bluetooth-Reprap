@@ -4,6 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.hermit.btreprap.R;
 import com.hermit.btreprap.service.RepRapConnectionService;
 import com.hermit.btreprap.service.RepRapConnectionService.IncomingHandler;
 

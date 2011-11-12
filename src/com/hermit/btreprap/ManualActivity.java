@@ -1,5 +1,6 @@
 package com.hermit.btreprap;
 
+import com.hermit.btreprap.R;
 import com.hermit.btreprap.service.RepRapConnectionService;
 
 import android.app.Activity;
@@ -157,6 +158,20 @@ public class ManualActivity extends Activity {
             }
         });
         
+        final Button buttonSetBedTemp = (Button) findViewById(R.id.buttonSetBedTemp);
+        final EditText textBedTemp = (EditText) findViewById(R.id.textBedTemp);
+        buttonSetBedTemp.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	Message msg = Message.obtain(null,
+                        RepRapConnectionService.MSG_COMMAND);
+            	msg.obj = "M140 S" + textBedTemp.getText().toString();
+                try {
+        			mServiceMessenger.send(msg);
+        		} catch (RemoteException e) {
+        		}
+            }
+        });
+        
         final ToggleButton buttonFanToggle = (ToggleButton) findViewById(R.id.buttonFanToggle);
         buttonFanToggle.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -182,6 +197,14 @@ public class ManualActivity extends Activity {
         buttonFiles.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	startActivity(intent);
+            }
+        });
+        
+        final Button buttonUpload = (Button) findViewById(R.id.buttonUpload);
+        final Intent intentUpload = new Intent().setClass(this, LocalFilesActivity.class);
+        buttonUpload.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	startActivity(intentUpload);
             }
         });
     }

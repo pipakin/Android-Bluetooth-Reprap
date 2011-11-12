@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hermit.btreprap"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="0.1.0" >
 
     <uses-sdk android:minSdkVersion="8" />
     <uses-permission android:name="android.permission.BLUETOOTH"/>
@@ -11,7 +11,7 @@
 
     <application
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name" android:debuggable="true" android:name="BluetoothRepRapApplication">
+        android:label="@string/app_name" android:debuggable="true" android:name=".BluetoothRepRapApplication">
         <activity
             android:label="@string/app_name"
             android:name=".BluetoothRepRap" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait">
@@ -24,9 +24,10 @@
         <activity android:name=".DeviceActivity"></activity>
         <activity android:name=".ManualActivity"></activity>
         <activity android:name=".SelectDeviceActivity" android:label="@string/select_device" android:screenOrientation="portrait"></activity>
-        <service android:name=".service.RepRapConnectionService"></service>
         <activity android:name="LogActivity"></activity>
         <activity android:name="SDFiles" android:screenOrientation="portrait" android:label="@string/selectfile"></activity>
+        <service android:name=".service.RepRapConnectionService"></service>
+        <activity android:label="@string/LOCAL_FILES" android:name="LocalFilesActivity" android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

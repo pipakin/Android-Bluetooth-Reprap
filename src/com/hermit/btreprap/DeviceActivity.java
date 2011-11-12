@@ -2,6 +2,7 @@ package com.hermit.btreprap;
 
 import java.util.Set;
 
+import com.hermit.btreprap.R;
 import com.hermit.btreprap.SelectDeviceActivity.IncomingHandler;
 import com.hermit.btreprap.service.RepRapConnectionService;
 

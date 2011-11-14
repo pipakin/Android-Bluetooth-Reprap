@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import com.hermit.btreprap.SDFiles.IncomingHandler;
 import com.hermit.btreprap.service.RepRapConnectionService;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -35,6 +37,8 @@ public class LocalFilesActivity extends ListActivity {
 	{
 		private LocalFilesActivity mActivity = null;
 		private int mLastProgress = 0;
+		private int mLastTotal = 0;
+		private String mLastMessage = "Uploading";
 		
 		public void Attach(LocalFilesActivity activity)
 		{
@@ -42,7 +46,7 @@ public class LocalFilesActivity extends ListActivity {
 			
 			if(mActivity.mState == STATE_PUSHING_FILE && mLastProgress != 0)
 			{
-				mActivity.onProgress(mLastProgress);
+				mActivity.onProgress(mLastProgress, mLastTotal, mLastMessage);
 			}
 		}
 		
@@ -56,7 +60,9 @@ public class LocalFilesActivity extends ListActivity {
             switch (msg.what) {
                 case RepRapConnectionService.MSG_SEND_PROGRESS:
                 	mLastProgress = msg.arg1;
-                	if(mActivity != null) mActivity.onProgress(mLastProgress);
+                	mLastTotal = msg.arg2;
+                	mLastMessage = (String)msg.obj;
+                	if(mActivity != null) mActivity.onProgress(mLastProgress, mLastTotal, mLastMessage);
                 	break;
                 default:
                     super.handleMessage(msg);
@@ -65,14 +71,16 @@ public class LocalFilesActivity extends ListActivity {
 
 	}
     
-    private void onProgress(int progress)
+    private void onProgress(int progress, int total, String message)
     {
     	mProgress = progress;
     	
 		//update progress dialog
+    	mProgressDialog.setMax(total);
         mProgressDialog.setProgress(progress);
+        mProgressDialog.setTitle(message);
 
-    	if(progress == 100)
+    	if(progress == total)
     	{
     		if(mProgressDialog != null)
     		{
@@ -217,25 +225,64 @@ public class LocalFilesActivity extends ListActivity {
 	{
 		super.onListItemClick(l, v, position, id);
 
-        String info = ((TextView) v).getText().toString();
+        final String info = ((TextView) v).getText().toString();
         
-        mProgressDialog = ProgressDialog.show(this, "Uploading", "Please wait...");
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle("Transferring");
+        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.setMax(100);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setProgress(0);
+
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("Print/Save");
+        
+        dialog.setButton(AlertDialog.BUTTON1,"Print", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+		        mProgressDialog.show();
                 
-        try {
-	        Message msg = Message.obtain(null,
-	                RepRapConnectionService.MSG_SEND_FILE);
-	        msg.replyTo = mMessenger;
-	        msg.obj = info;
-	        mServiceMessenger.send(msg);
-	        
-	        mState = STATE_PUSHING_FILE;
-        }
-        catch(RemoteException e)
-        {
+		        try {
+			        Message msg = Message.obtain(null,
+			                RepRapConnectionService.MSG_SEND_FILE);
+			        msg.replyTo = mMessenger;
+			        msg.obj = info;
+			        msg.arg1 = RepRapConnectionService.PUSH_PRINT;
+			        mServiceMessenger.send(msg);
+			        
+			        mState = STATE_PUSHING_FILE;
+		        }
+		        catch(RemoteException e)
+		        {
+		        
+		        }
+				
+			}
+		});        
         
-        }
+        dialog.setButton(AlertDialog.BUTTON2, "Save to SD", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+		        mProgressDialog.show();
+                
+		        try {
+			        Message msg = Message.obtain(null,
+			                RepRapConnectionService.MSG_SEND_FILE);
+			        msg.replyTo = mMessenger;
+			        msg.obj = info;
+			        msg.arg1 = RepRapConnectionService.PUSH_SAVE;
+			        mServiceMessenger.send(msg);
+			        
+			        mState = STATE_PUSHING_FILE;
+		        }
+		        catch(RemoteException e)
+		        {
+		        
+		        }
+				
+			}
+		});
         
-        finish();
+        dialog.show();
+        
 	}
 
 }

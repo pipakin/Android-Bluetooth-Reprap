@@ -9,14 +9,17 @@ import com.hermit.btreprap.service.RepRapConnectionService;
 import com.hermit.btreprap.service.RepRapConnectionService.IncomingHandler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -162,6 +165,24 @@ public class SelectDeviceActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         
         setResult(RESULT_CANCELED);
+        
+        //NOTE: this should only run for the free version, obviously.
+        /*AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("Free Version");
+        dialog.setMessage("You are currently running the free version of this app, please consider upgrading to the paid version to support continued development");
+        dialog.setButton(AlertDialog.BUTTON1, "Market", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				intent.setData(Uri.parse("market://details?id=com.hermit.btreprap"));
+				startActivity(intent);
+			}
+		});
+        dialog.setButton(AlertDialog.BUTTON2, "Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.cancel();
+			}
+		});
+        dialog.show();*/
         
         mHandler = new IncomingHandler();
     	mMessenger = new Messenger(mHandler);

@@ -27,6 +27,7 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.RemoteException;
+import android.util.Log;
 import android.widget.Toast;
 
 public class RepRapConnectionService extends Service {
@@ -55,6 +56,10 @@ public class RepRapConnectionService extends Service {
 	public static final int MSG_FILE_LIST = 16;
 	public static final int MSG_SEND_PROGRESS = 17;
 	
+	//Push Types
+	public static final int PUSH_PRINT = 1;
+	public static final int PUSH_SAVE = 2;
+	
 	// Unique UUID for this application TODO: Change this
     public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -71,6 +76,7 @@ public class RepRapConnectionService extends Service {
 	private ArrayList<Messenger> mClients = new ArrayList<Messenger>();
 	private BluetoothConnectThread mConnectThread;
 	private RepRapCommandThread mCommandThread;
+	private RepRapFilePushThread mFileThread;
 	private Bundle mStatus = new Bundle();
 	private WakeLock mWakeLock;
 	
@@ -109,6 +115,7 @@ public class RepRapConnectionService extends Service {
 		//cancel threads
 		if(mConnectThread != null){mConnectThread.cancel(); mConnectThread = null; }
 		if(mCommandThread != null){mCommandThread.cancel(); mCommandThread = null; }
+		if(mFileThread != null){mFileThread.cancel(); mFileThread = null; }
 		
 		//disconnect from bluetooth device
 		if(mSocket != null){ try {
@@ -169,6 +176,21 @@ public class RepRapConnectionService extends Service {
 		for (int i=mClients.size()-1; i>=0; i--) {
             try {
         		Message msg = Message.obtain(null, what);
+        		mClients.get(i).send(msg);
+            } catch (RemoteException e) {
+                // The client is dead.  Remove it from the list;
+                // we are going through the list from back to front
+                // so this is safe to do inside the loop.
+                mClients.remove(i);
+            }
+        }
+	}
+	
+	private void sendMessage(int what, int arg1, int arg2, Object o)
+	{
+		for (int i=mClients.size()-1; i>=0; i--) {
+            try {
+        		Message msg = Message.obtain(null, what, arg1, arg2, o);
         		mClients.get(i).send(msg);
             } catch (RemoteException e) {
                 // The client is dead.  Remove it from the list;
@@ -280,6 +302,12 @@ public class RepRapConnectionService extends Service {
                 case MSG_GET_STATUS:
                 	mService.get().sendBundle(MSG_STATUS, mService.get().mStatus);
                 	break;
+                case MSG_SEND_FILE:
+                	mService.get().sendFile((String) msg.obj, msg.arg1);
+                	break;
+                case MSG_SEND_PROGRESS:
+                	mService.get().sendMessage(msg.what, msg.arg1, msg.arg2, msg.obj);
+                	break;
                 default:
                     super.handleMessage(msg);
             }
@@ -320,5 +348,11 @@ public class RepRapConnectionService extends Service {
 			e.printStackTrace();
 		}
 		sendMessage(MSG_CONNECTED);
+	}
+	
+	public void sendFile(String file, int type)
+	{
+		mFileThread = new RepRapFilePushThread(mMessenger, file, mInStream, mOutStream, type);
+		mFileThread.start();
 	}
 }

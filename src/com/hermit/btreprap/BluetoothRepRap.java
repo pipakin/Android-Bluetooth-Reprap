@@ -1,6 +1,6 @@
 package com.hermit.btreprap;
 
-import com.hermit.btreprap.R;
+import com.hermit.btreprap.free.R;
 import com.hermit.btreprap.service.RepRapConnectionService;
 
 import android.app.TabActivity;

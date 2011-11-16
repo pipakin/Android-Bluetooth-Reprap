@@ -4,7 +4,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.hermit.btreprap.R;
+import com.hermit.btreprap.free.R;
 import com.hermit.btreprap.service.RepRapConnectionService;
 import com.hermit.btreprap.service.RepRapConnectionService.IncomingHandler;
 
@@ -167,7 +167,7 @@ public class SelectDeviceActivity extends ListActivity {
         setResult(RESULT_CANCELED);
         
         //NOTE: this should only run for the free version, obviously.
-        /*AlertDialog dialog = new AlertDialog.Builder(this).create();
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
         dialog.setTitle("Free Version");
         dialog.setMessage("You are currently running the free version of this app, please consider upgrading to the paid version to support continued development");
         dialog.setButton(AlertDialog.BUTTON1, "Market", new DialogInterface.OnClickListener() {
@@ -182,7 +182,7 @@ public class SelectDeviceActivity extends ListActivity {
 				dialog.cancel();
 			}
 		});
-        dialog.show();*/
+        dialog.show();
         
         mHandler = new IncomingHandler();
     	mMessenger = new Messenger(mHandler);

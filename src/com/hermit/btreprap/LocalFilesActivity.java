@@ -205,7 +205,7 @@ public class LocalFilesActivity extends ListActivity {
 
 		String[] files = dir.list();
 		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.device_name); 
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, com.hermit.btreprap.free.R.layout.device_name); 
         
         setListAdapter(adapter);
         

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Bluetooth RepRap</string>
+    <string name="app_name">Bluetooth RepRap Free</string>
     <string name="device">Device:</string>
     <string name="select_device">Select Device</string>
     <string name="FIRMWARE_NAME">Firmware Name: </string>
